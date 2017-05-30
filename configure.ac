@@ -98,9 +98,13 @@ AS_IF([test x$enable_zhfst != xno],
                   [AC_DEFINE([HAVE_LIBARCHIVE], [1], [Use archives])
                    enable_zhfst=yes],
                   [PKG_CHECK_MODULES([LIBARCHIVE], [libarchive > 2],
-                  [AC_DEFINE([HAVE_LIBARCHIVE], [1], [Use archives])
-		   AC_DEFINE([USE_LIBARCHIVE_2], [1], [Use libarchive2])
-                   enable_zhfst=yes],[enable_zhfst=no])])])
+                              [AC_DEFINE([HAVE_LIBARCHIVE], [1], [Use archives])
+	                       AC_DEFINE([USE_LIBARCHIVE_2], [1], [Use libarchive2])
+                               enable_zhfst=yes],
+                              [AS_IF([test x$enable_zhfst != xcheck],
+                                     [AC_MSG_ERROR([zhfst support requires either libarchive or libarchive2])
+                                      enable_zhfst=no],
+                                     [enable_zhfst=no])])])])
 
 AM_CONDITIONAL([WANT_ARCHIVE], [test x$enable_zhfst != xno])
 AS_IF([test x$with_libxmlpp != xno],
