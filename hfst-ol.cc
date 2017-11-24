@@ -774,6 +774,11 @@ SymbolNumber LetterTrie::find_key(char ** p)
     return s;
 }
 
+bool LetterTrie::has_key_starting_with(const char c) const
+{
+    return letters[(unsigned char) c] != NULL;
+}
+
 LetterTrie::~LetterTrie()
 {
     for (auto& i : letters)
@@ -793,10 +798,18 @@ void Encoder::read_input_symbol(const char * s, const int s_num)
     if (strlen(s) == 0) { // ignore empty strings
         return;
     }
-    if ((strlen(s) == 1) && (unsigned char)(*s) <= 127)
+    if ((strlen(s) == 1) && (unsigned char)(*s) <= 127 &&
+        !letters.has_key_starting_with((unsigned char)(*s)))
     {
+        // If it's in the ascii range and there isn't a longer symbol starting
+        // with the same character, add it to the shortcut ascii table
         ascii_symbols[(unsigned char)(*s)] = static_cast<SymbolNumber>(s_num);
+    } else if ((unsigned char)(*s) <= 127 &&
+               ascii_symbols[(unsigned char)(*s)] != NO_SYMBOL) {
+        // If this is shadowed by an ascii symbol, unshadow
+        ascii_symbols[(unsigned char)(*s)] = NO_SYMBOL;
     }
+    
     letters.add_string(s, static_cast<SymbolNumber>(s_num));
 }
 

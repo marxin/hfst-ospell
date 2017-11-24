@@ -246,6 +246,7 @@ public:
     //!
     //! find a key for string or add it
     SymbolNumber find_key(char ** p);
+    bool has_key_starting_with(const char c) const;
     ~LetterTrie();
 };
 

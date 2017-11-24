@@ -260,7 +260,7 @@ void Speller::lexicon_consume(void)
         return;
     }
     SymbolNumber this_input;
-    if (mutator != NULL) {
+    if (mutator != NULL && mode != Check) {
         this_input = alphabet_translator[input[input_state]];
     } else {
         // To support zhfst spellers without error models, we allow
@@ -1151,7 +1151,7 @@ bool Speller::init_input(char * line)
 
     while (**inpointer != '\0') {
         oldpointer = *inpointer;
-        if (mutator != NULL) {
+        if (mutator != NULL && mode != Check) {
             k = mutator->get_encoder()->find_key(inpointer);
         } else {
             k = lexicon->get_encoder()->find_key(inpointer);
