@@ -35,6 +35,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <unordered_set>
 #include <map>
 #include <sstream>
 #include <stdexcept>
@@ -63,6 +64,7 @@ struct word_t {
 };
 std::vector<word_t> words(16);
 std::string buffer;
+std::unordered_set<std::string> outputs;
 UnicodeString ubuffer, uc_buffer;
 size_t cw;
 
@@ -71,6 +73,8 @@ bool uc_first = false;
 bool uc_all = true;
 
 bool find_alternatives(ZHfstOspeller& speller, size_t suggs) {
+	outputs.clear();
+
 	for (size_t k=1 ; k <= cw ; ++k) {
 		buffer.clear();
 		words[cw-k].buffer.toUTF8String(buffer);
@@ -82,7 +86,7 @@ bool find_alternatives(ZHfstOspeller& speller, size_t suggs) {
 
 		std::cout << "&";
 		// Because speller.set_queue_limit() doesn't actually work, hard limit it here
-		for (size_t i=0, e=corrections.size() ; i<e && i<suggs ; ++i) {
+		for (size_t i=0, e=corrections.size() ; i<e && i<suggs ;) {
 			std::cout << "\t";
 
 			buffer.clear();
@@ -106,7 +110,11 @@ bool find_alternatives(ZHfstOspeller& speller, size_t suggs) {
 				words[0].buffer.tempSubString(words[cw-k].start + words[cw-k].count).toUTF8String(buffer);
 			}
 
-			std::cout << buffer;
+			if (outputs.count(buffer) == 0) {
+				std::cout << buffer;
+				++i;
+			}
+			outputs.insert(buffer);
 			corrections.pop();
 		}
 		std::cout << std::endl;
