@@ -86,7 +86,7 @@ bool find_alternatives(ZHfstOspeller& speller, size_t suggs) {
 
 		std::cout << "&";
 		// Because speller.set_queue_limit() doesn't actually work, hard limit it here
-		for (size_t i=0, e=corrections.size() ; i<e && i<suggs ;) {
+		for (size_t i=0, n=0, e=corrections.size() ; i<e && n<suggs ; ++i) {
 			std::cout << "\t";
 
 			buffer.clear();
@@ -112,7 +112,7 @@ bool find_alternatives(ZHfstOspeller& speller, size_t suggs) {
 
 			if (outputs.count(buffer) == 0) {
 				std::cout << buffer;
-				++i;
+				++n;
 			}
 			outputs.insert(buffer);
 			corrections.pop();
