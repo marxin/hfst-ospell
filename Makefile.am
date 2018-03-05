@@ -122,7 +122,13 @@ TESTS=tests/basic-zhfst.sh tests/basic-edit1.sh \
 	  tests/empty-descriptions.sh tests/empty-titles.sh tests/empty-locale.sh \
 	  tests/trailing-spaces.sh tests/bad-errormodel.sh tests/empty-zhfst.sh \
 	  tests/analyse-spell.sh tests/no-errormodel.sh
+if WANT_ARCHIVE
 XFAIL_TESTS=tests/empty-descriptions.sh tests/empty-titles.sh tests/empty-locale.sh tests/empty-zhfst.sh
+else
+XFAIL_TESTS=tests/empty-descriptions.sh tests/empty-titles.sh tests/empty-locale.sh tests/empty-zhfst.sh \
+	tests/basic-zhfst.sh tests/basic-edit1.sh tests/trailing-spaces.sh tests/bad-errormodel.sh \
+	tests/analyse-spell.sh tests/no-errormodel.sh
+endif
 
 if CAN_DOXYGEN
 doxygen:
