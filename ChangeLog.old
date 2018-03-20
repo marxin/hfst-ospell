@@ -1,4 +1,19 @@
-9562377 (HEAD -> master, origin/master, origin/HEAD) Fixes for big endian conversions; Make use of AC_C_BIGENDIAN and WORDS_BIGENDIAN; UCHAR_MAX should be +1 to allow hitting index 255
+4f2026c (HEAD -> master, origin/master, origin/HEAD) Add missing files to dist.
+bae21c3 Forgot to commit configure.ac... Update hfst-ospell manual and add man pages to dist.
+7c8690a (tag: v0.4.4) Ready for release 0.4.4.
+671efe6 Trusty has C++11
+32842b1 Disable nightly repo
+2a4e556 Move more files
+0ab57c9 Remove HFST dependency - fixes #26; Move tests to folder
+687b3c1 The --with-extract arg now sets the default - the other option is still tried if default fails; Oddly enough, this fixes issue #26 for no good reason - it's happily extracting to memory now, when it wasn't before.
+f061774 Apply the notimestamp patch in trunk
+3322fd2 Extra early checks for archive extraction failures
+0cc1a4a Use std::runtime_exception
+14b1b2c Rename stdafx.h and install it
+4569e9f Windows DLL fixes
+88aa8dd Allow building without XML support
+139790f (tag: v0.4.3) Ready for release 0.4.3.
+9562377 Fixes for big endian conversions; Make use of AC_C_BIGENDIAN and WORDS_BIGENDIAN; UCHAR_MAX should be +1 to allow hitting index 255
 bf79d25 Add returns
 8573403 Merge branch 'big_endian_compatibility_suggestion' In hopes that this approach to fixing build problems on the problematic architectures will get tested for Debian builds. This is experimental, but at least shouldn't break anything - feel free to revert if unhelpful.
 b756b2e Killed an error. Don't know whether it was the correct solution - please review.

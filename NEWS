@@ -4,6 +4,15 @@ NEWS for hfst-ospell
 This file contains all noteworthy changes in HFST-ospell development between
 releases. For full listing of changes see ChangeLog.
 
+Noteworthy changes in 0.5.0
+---------------------------
+
+* rename hfst_ol namespace to hfst_ospell to avoid conflicts
+* improve distinguishing between lemmas and tags in analysis
+* fix issue #37
+* avoid shadowing multicharacter ascii-beginning symbols
+* use minimal XML parsing to get locale, title, and description for Voikko and other frontends
+
 Noteworthy changes in 0.4.5
 ---------------------------
 

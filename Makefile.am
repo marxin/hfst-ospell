@@ -54,7 +54,7 @@ endif
 libhfstospell_la_SOURCES=hfst-ol.cc ospell.cc \
 						 ZHfstOspeller.cc ZHfstOspellerXmlMetadata.cc
 libhfstospell_la_CXXFLAGS=$(AM_CXXFLAGS) $(CXXFLAGS) $(PKG_CXXFLAGS)
-libhfstospell_la_LDFLAGS=-no-undefined -version-info 9:0:0 \
+libhfstospell_la_LDFLAGS=-no-undefined -version-info 10:0:0 \
 						 $(PKG_LIBS)
 
 # link sample program against library here
