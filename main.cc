@@ -151,7 +151,7 @@ bool print_version(void)
     std::cout <<
     "\n" <<
     PACKAGE_STRING << std::endl <<
-    "copyright (C) 2009 - 2016 University of Helsinki\n";
+    "copyright (C) 2009 - 2018 University of Helsinki\n";
     return true;
 }
 
