@@ -64,6 +64,7 @@ struct word_t {
 };
 std::vector<word_t> words(16);
 std::string buffer;
+std::vector<std::string> alts;
 std::unordered_set<std::string> outputs;
 UnicodeString ubuffer, uc_buffer;
 size_t cw;
@@ -74,24 +75,24 @@ bool uc_all = true;
 
 bool find_alternatives(ZHfstOspeller& speller, size_t suggs) {
 	outputs.clear();
+	alts.clear();
 
-	for (size_t k=1 ; k <= cw ; ++k) {
+	// Gather corrections from all the tried variants, starting with verbatim and increasing mangling from there
+	for (size_t k=0 ; k < cw && alts.size()<suggs ; ++k) {
 		buffer.clear();
-		words[cw-k].buffer.toUTF8String(buffer);
+		words[k].buffer.toUTF8String(buffer);
 		hfst_ospell::CorrectionQueue corrections = speller.suggest(buffer);
 
 		if (corrections.size() == 0) {
 			continue;
 		}
 
-		std::cout << "&";
 		// Because speller.set_queue_limit() doesn't actually work, hard limit it here
-		for (size_t i=0, n=0, e=corrections.size() ; i<e && n<suggs ; ++i) {
-			std::cout << "\t";
+		for (size_t i=0, e=corrections.size() ; i<e && alts.size()<suggs ; ++i) {
 
 			buffer.clear();
-			if (cw - k != 0) {
-				words[0].buffer.tempSubString(0, words[cw-k].start).toUTF8String(buffer);
+			if (k != 0) {
+				words[0].buffer.tempSubString(0, words[k].start).toUTF8String(buffer);
 			}
 			if (uc_all) {
 				UnicodeString::fromUTF8(corrections.top().first).toUpper().toUTF8String(buffer);
@@ -106,20 +107,27 @@ bool find_alternatives(ZHfstOspeller& speller, size_t suggs) {
 			else {
 				buffer.append(corrections.top().first);
 			}
-			if (cw - k != 0) {
-				words[0].buffer.tempSubString(words[cw-k].start + words[cw-k].count).toUTF8String(buffer);
+			if (k != 0) {
+				words[0].buffer.tempSubString(words[k].start + words[k].count).toUTF8String(buffer);
 			}
 
 			if (outputs.count(buffer) == 0) {
-				std::cout << buffer;
-				++n;
+				alts.push_back(buffer);
 			}
 			outputs.insert(buffer);
 			corrections.pop();
 		}
+	}
+
+	if (!alts.empty()) {
+		std::cout << "&";
+		for (auto& alt : alts) {
+			std::cout << "\t" << alt;
+		}
 		std::cout << std::endl;
 		return true;
 	}
+
 	return false;
 }
 
