@@ -49,6 +49,7 @@
 #include <unicode/uloc.h>
 #include <unicode/uchar.h>
 #include <unicode/unistr.h>
+using namespace icu;
 
 #include "ZHfstOspeller.h"
 
