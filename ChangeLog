@@ -1,4 +1,8 @@
-678d45d (HEAD -> master, origin/master, origin/HEAD) Treat all tests as XFAIL_TESTS if zhfst support is disabled.
+a949408 (HEAD -> master, origin/master, origin/HEAD) ICU is namespaced in newer versions (fixes #42)
+e272cd2 Change correction finding order (issue #28); Require C++1y (C++14)
+0521ea9 (tag: v0.5.0) Copyright extends to 2018.
+e16dcbb Ready for release 0.5.0.
+678d45d Treat all tests as XFAIL_TESTS if zhfst support is disabled.
 a3f39d9 Merge pull request #31 from hfst/configure-explicit-error
 bc1c9ea Separate counters (fixes #37, closes #38)
 a4aeae0 Post-case-mangling unique test

@@ -4,6 +4,13 @@ NEWS for hfst-ospell
 This file contains all noteworthy changes in HFST-ospell development between
 releases. For full listing of changes see ChangeLog.
 
+Noteworthy changes in 0.5.1
+---------------------------
+
+* change correction finding order (fixes issue #28)
+* require C++1y (C++14)
+* observe ICU namespacing (fixes issue #42)
+
 Noteworthy changes in 0.5.0
 ---------------------------
 

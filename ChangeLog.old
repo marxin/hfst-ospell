@@ -1,4 +1,21 @@
-4f2026c (HEAD -> master, origin/master, origin/HEAD) Add missing files to dist.
+678d45d (HEAD -> master, origin/master, origin/HEAD) Treat all tests as XFAIL_TESTS if zhfst support is disabled.
+a3f39d9 Merge pull request #31 from hfst/configure-explicit-error
+bc1c9ea Separate counters (fixes #37, closes #38)
+a4aeae0 Post-case-mangling unique test
+1d088e1 Avoid shadowing multicharacter ascii-beginning symbols
+69ab95d Merge pull request #35 from unhammer/renamespace-hfst_ol
+d39b93c rename hfst_ol namespace to hfst_ospell to avoid conflicts
+eccbd6f Bump actual version; Modernize for() loops
+a9919f4 Merge pull request #33 from unhammer/analysisSymbols
+f36de02 bump minor version because of new API function
+019f303 New API fn analyseSymbols giving unconcatenated vector<string>'s
+da508b7 Dirty hack to parse XML a bit better; ToDo: use actual portable XML library
+dad7c5c Minimal XML parsing to get locale, title, and description for Voikko and other frontends
+f40d4b5 (origin/configure-explicit-error) let './configure --enable-zhfst' fail if no libarchive found
+a737b52 When using help2man remember -n description
+1fc3fca Update copyright and authors listing
+d791a41 (tag: v0.4.5) Release 0.4.5.
+4f2026c Add missing files to dist.
 bae21c3 Forgot to commit configure.ac... Update hfst-ospell manual and add man pages to dist.
 7c8690a (tag: v0.4.4) Ready for release 0.4.4.
 671efe6 Trusty has C++11
