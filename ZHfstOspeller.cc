@@ -52,7 +52,7 @@ inline std::string extract_to_mem(archive* ar, archive_entry* entry) {
 
     std::string buff(buffsize, 0);
     for (;;) {
-        ssize_t curr = archive_read_data(ar, &buff[0] + full_length, buffsize - full_length);
+        auto curr = archive_read_data(ar, &buff[0] + full_length, buffsize - full_length);
         if (0 == curr) {
             break;
         }
@@ -85,6 +85,9 @@ inline Transducer* transducer_to_mem(archive* ar, archive_entry* entry) {
 }
 
 inline char* extract_to_tmp_dir(archive* ar) {
+#ifdef _MSC_VER
+    throw std::runtime_error("extract_to_tmp_dir() not yet implemented");
+#else
     char* rv = strdup("/tmp/zhfstospellXXXXXXXX");
     int temp_fd = mkstemp(rv);
     int rr = archive_read_data_into_fd(ar, temp_fd);
@@ -93,6 +96,7 @@ inline char* extract_to_tmp_dir(archive* ar) {
     }
     close(temp_fd);
     return rv;
+#endif
 }
 
 inline Transducer* transducer_to_tmp_dir(archive* ar) {
