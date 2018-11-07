@@ -2,7 +2,10 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 project(hfst-ospell CXX)
 
-option(CMAKE_BUILD_TYPE "Whether to build Release or Debug. Defaults to Release" "Release")
+# Release or Debug
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE "Release")
+endif()
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -103,12 +106,15 @@ target_link_libraries(hfstospell PRIVATE ${LIBARCHIVE_LIB})
 set_target_properties(hfstospell PROPERTIES COMPILE_DEFINITIONS LIBHFSTOSPELL_EXPORTS=1)
 
 add_executable(hfst-ospell main.cc)
-target_link_libraries(hfst-ospell PRIVATE hfstospell ${GETOPT_LIB})
+target_link_libraries(hfst-ospell PRIVATE hfstospell)
+if(GETOPT_LIB)
+	target_link_libraries(hfst-ospell PRIVATE ${GETOPT_LIB})
+endif()
 
 add_executable(hfst-ospell-office office.cc)
 target_link_libraries(hfst-ospell-office PRIVATE hfstospell ${ICU_LIBRARIES} ${ICU_IO_LIBRARIES} ${ICU_I18N_LIBRARIES})
 
-set_target_properties(hfstospell hfst-ospell hfst-ospell-office
+set_target_properties(hfstospell
 	PROPERTIES
 	VERSION ${VERSION}
 	SOVERSION ${SOVERSION}
