@@ -55,6 +55,8 @@ else()
 	endif()
 endif()
 
+include(GNUInstallDirs)
+
 include(TestBigEndian)
 TEST_BIG_ENDIAN(BIG_ENDIAN)
 if(BIG_ENDIAN)
@@ -96,6 +98,7 @@ add_definitions(
 	"-DPACKAGE_STRING=\"hfstospell ${VERSION}\""
 	)
 
+# Library libhfstospell
 add_library(hfstospell
 	hfst-ol.cc
 	ospell.cc
@@ -105,17 +108,30 @@ add_library(hfstospell
 target_link_libraries(hfstospell PRIVATE ${LIBARCHIVE_LIB})
 set_target_properties(hfstospell PROPERTIES COMPILE_DEFINITIONS LIBHFSTOSPELL_EXPORTS=1)
 
+# Binary hfst-ospell
 add_executable(hfst-ospell main.cc)
 target_link_libraries(hfst-ospell PRIVATE hfstospell)
 if(GETOPT_LIB)
 	target_link_libraries(hfst-ospell PRIVATE ${GETOPT_LIB})
 endif()
 
-add_executable(hfst-ospell-office office.cc)
-target_link_libraries(hfst-ospell-office PRIVATE hfstospell ${ICU_LIBRARIES} ${ICU_IO_LIBRARIES} ${ICU_I18N_LIBRARIES})
+# Library libhfstospelloffice
+add_library(hfstospelloffice liboffice.cc liboffice.h)
+target_link_libraries(hfstospelloffice PRIVATE hfstospell ${ICU_LIBRARIES} ${ICU_IO_LIBRARIES} ${ICU_I18N_LIBRARIES})
+set_target_properties(hfstospelloffice PROPERTIES COMPILE_DEFINITIONS LIBHFSTOSPELLOFFICE_EXPORTS=1)
 
-set_target_properties(hfstospell
+# Binary hfst-ospell-office
+add_executable(hfst-ospell-office office.cc liboffice.h)
+target_link_libraries(hfst-ospell-office PRIVATE hfstospelloffice)
+
+set_target_properties(hfstospell hfstospelloffice
 	PROPERTIES
 	VERSION ${VERSION}
 	SOVERSION ${SOVERSION}
+	)
+
+install(TARGETS hfstospell hfstospelloffice hfst-ospell hfst-ospell-office
+	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 	)
