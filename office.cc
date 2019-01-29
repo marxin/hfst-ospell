@@ -27,22 +27,32 @@
 
 int main(int argc, char **argv) {
     bool verbatim = false;
+    bool stream = false;
 
     std::vector<std::string> args(argv, argv+argc);
-	for (auto it=args.begin() ; it != args.end() ; ) {
-		if (*it == "--verbatim") {
-			verbatim = true;
-			it = args.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
+    for (auto it=args.begin() ; it != args.end() ; ) {
+        if (*it == "--verbatim") {
+            verbatim = true;
+            it = args.erase(it);
+        }
+        else if (*it == "--stream") {
+            stream = true;
+            it = args.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
 
     if (args.size() < 2) {
         throw std::invalid_argument("Must pass a zhfst as argument");
     }
 
     hfst_ospell::OfficeSpeller speller(args[1].c_str(), verbatim);
-    speller.ispell(std::cin, std::cout);
+    if (stream) {
+        speller.stream(std::cin, std::cout);
+    }
+    else {
+        speller.ispell(std::cin, std::cout);
+    }
 }

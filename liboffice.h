@@ -22,6 +22,50 @@
 
 namespace hfst_ospell {
 
+template<typename C>
+inline auto is_space(const C& c) {
+    return ((c == ' ') || (c == '\t') || (c == '\r') || (c == '\n'));
+}
+
+template<typename Str>
+inline void trim(Str& str) {
+    while (!str.empty() && is_space(str.back())) {
+        str.pop_back();
+    }
+    while (!str.empty() && is_space(str.front())) {
+        str.erase(str.begin());
+    }
+}
+
+template<typename Str>
+inline void normalize(Str& str) {
+    // NBSP
+    size_t s = 0;
+    while ((s = str.find("\xc2\xa0", s)) != Str::npos) {
+        str.replace(s, 2, " ");
+    }
+    // Soft-hyphen
+    s = 0;
+    while ((s = str.find("\xc2\xad", s)) != Str::npos) {
+        str.erase(s, 2);
+    }
+    // Tab
+    s = 0;
+    while ((s = str.find("\t", s)) != Str::npos) {
+        str[s] = ' ';
+    }
+    // Carriage return
+    s = 0;
+    while ((s = str.find("\r", s)) != Str::npos) {
+        str[s] = ' ';
+    }
+    // Multiple spaces
+    s = 0;
+    while ((s = str.find("  ", s)) != Str::npos) {
+        str.replace(s, 2, " ");
+    }
+}
+
 class OfficeSpeller {
 public:
     OSPELL_OFFICE_API OfficeSpeller(const char* zhfst, bool verbatim = false);
@@ -31,6 +75,7 @@ public:
     OSPELL_OFFICE_API OfficeSpeller& operator=(OfficeSpeller &&) noexcept;
 
     OSPELL_OFFICE_API void ispell(std::istream& in, std::ostream& out);
+    OSPELL_OFFICE_API void stream(std::istream& in, std::ostream& out);
     OSPELL_OFFICE_API bool check(const std::string& word);
     OSPELL_OFFICE_API const std::vector<std::string>& correct(const std::string& word, size_t suggs = 5);
 

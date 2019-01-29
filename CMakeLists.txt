@@ -41,7 +41,7 @@ else()
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${_FLAGS_COMMON} -fvisibility-inlines-hidden")
 
 	# Require latest possible C++ standard
-	foreach(flag "-std=c++20" "-std=c++2a" "-std=c++17" "-std=c++1z" "-std=c++14" "-std=c++1y")
+	foreach(flag "-std=c++20" "-std=c++2a" "-std=c++17" "-std=c++1z")
 		string(REGEX REPLACE "[^a-z0-9]" "-" _flag ${flag})
 		CHECK_CXX_COMPILER_FLAG(${flag} COMPILER_SUPPORTS_${_flag})
 		if(COMPILER_SUPPORTS_${_flag})
@@ -51,7 +51,7 @@ else()
 		endif()
 	endforeach()
 	if(NOT _ENABLED_CXX)
-		message(FATAL_ERROR "Could not enable at least C++14 (C++1y) - upgrade your compiler")
+		message(FATAL_ERROR "Could not enable at least C++17 (C++1z) - upgrade your compiler")
 	endif()
 endif()
 
@@ -66,6 +66,11 @@ endif()
 if(WIN32)
 	add_definitions(-D_SECURE_SCL=0 -D_ITERATOR_DEBUG_LEVEL=0 -D_CRT_SECURE_NO_DEPRECATE -DWIN32_LEAN_AND_MEAN -DVC_EXTRALEAN -DNOMINMAX)
 endif()
+
+# Boost
+find_package(Boost 1.53.0 REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+link_directories(${Boost_LIBRARY_DIRS})
 
 # getopt
 find_path(GETOPT_INCLUDE getopt.h)
