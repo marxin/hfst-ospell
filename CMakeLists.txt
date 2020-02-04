@@ -1,5 +1,6 @@
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
-cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
+cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 project(hfst-ospell CXX)
 
 # Release or Debug
@@ -78,9 +79,8 @@ find_library(GETOPT_LIB NAMES getopt)
 include_directories(${GETOPT_INCLUDE})
 
 # libarchive
-find_path(LIBARCHIVE_INCLUDE archive.h)
-find_library(LIBARCHIVE_LIB NAMES archive)
-include_directories(${LIBARCHIVE_INCLUDE})
+find_package(LibArchive REQUIRED)
+include_directories(${LibArchive_INCLUDE_DIRS})
 
 # ICU
 find_package(ICU REQUIRED)
@@ -110,7 +110,7 @@ add_library(hfstospell
 	ZHfstOspeller.cc
 	ZHfstOspellerXmlMetadata.cc
 	)
-target_link_libraries(hfstospell PRIVATE ${LIBARCHIVE_LIB})
+target_link_libraries(hfstospell PRIVATE ${LibArchive_LIBRARIES})
 set_target_properties(hfstospell PROPERTIES COMPILE_DEFINITIONS LIBHFSTOSPELL_EXPORTS=1)
 
 # Binary hfst-ospell

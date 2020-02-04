@@ -335,7 +335,7 @@ public:
         }
     }
 
-    void check_block(std::string& buffer, std::string& btag, std::string& etag, std::ostream& out) {
+    void check_block(std::string& buffer, std::string& btag, std::string& etag, std::ostream& out, size_t suggs=5) {
         trim(buffer);
         if (buffer.empty()) {
             return;
@@ -423,9 +423,9 @@ public:
                 if (bads.test(w)) {
                     out << '\t';
                     word.assign(words[w]);
-                    is_valid_word(speller, word);
-                    auto& suggs = find_alternatives(speller, 5);
-                    for (auto& sug : suggs) {
+                    is_valid_word(speller, word, suggs);
+                    auto& sugs = find_alternatives(speller, suggs);
+                    for (auto& sug : sugs) {
                         out << "<R:" << sug << "> ";
                     }
                 }
