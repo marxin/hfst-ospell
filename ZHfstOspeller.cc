@@ -37,6 +37,12 @@ using std::map;
 #include "hfst-ol.h"
 #include "ZHfstOspeller.h"
 
+#ifdef WIN32
+#include <io.h>
+#include <fcntl.h>
+#include <windows.h>
+#endif
+
 namespace hfst_ospell
   {
 
@@ -85,19 +91,30 @@ inline Transducer* transducer_to_mem(archive* ar, archive_entry* entry) {
 }
 
 inline char* extract_to_tmp_dir(archive* ar) {
-    char* rv = strdup("/tmp/zhfstospellXXXXXXXX");
+#ifdef WIN32
+    char rv[MAX_PATH+1];
+    if (!GetTempPathA(MAX_PATH, rv)) {
+        throw ZHfstZipReadingError("Could not get temporary path");
+    }
+    strcat(rv, "zhfstospellXXXXXX");
+    mktemp(rv);
+    int temp_fd = open(rv, _O_CREAT | _O_TRUNC | _O_RDWR);
+#else
+    char rv[] = "/tmp/zhfstospellXXXXXXXX";
     int temp_fd = mkstemp(rv);
+#endif
     int rr = archive_read_data_into_fd(ar, temp_fd);
     if ((rr != ARCHIVE_EOF) && (rr != ARCHIVE_OK)) {
         throw ZHfstZipReadingError("Archive not EOF'd or OK'd");
     }
     close(temp_fd);
-    return rv;
+    return strdup(rv);
 }
 
 inline Transducer* transducer_to_tmp_dir(archive* ar) {
     char *filename = extract_to_tmp_dir(ar);
     FILE* f = fopen(filename, "rb");
+    free(filename);
     if (f == nullptr) {
         throw ZHfstTemporaryWritingError("reading acceptor back from temp file");
     }
@@ -397,6 +414,7 @@ ZHfstOspeller::read_zhfst(const string& filename)
             catch (...) {
                 char* temporary = extract_to_tmp_dir(ar);
                 metadata_.read_xml(temporary);
+                free(temporary);
             }
           }
         else

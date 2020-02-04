@@ -143,7 +143,6 @@ AC_TYPE_SIZE_T
 AC_C_BIGENDIAN
 
 # Checks for library functions
-AC_FUNC_MALLOC
 AC_CHECK_FUNCS([strndup error])
 # Checks for system services
 
